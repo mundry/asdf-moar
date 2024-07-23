@@ -2,7 +2,7 @@
 
 # asdf-moar [![Build](https://github.com/mundry/asdf-moar/actions/workflows/build.yml/badge.svg)](https://github.com/mundry/asdf-moar/actions/workflows/build.yml) [![Lint](https://github.com/mundry/asdf-moar/actions/workflows/lint.yml/badge.svg)](https://github.com/mundry/asdf-moar/actions/workflows/lint.yml)
 
-[moar](https://github.com/walles/moar) plugin for the [asdf version manager](https://asdf-vm.com).
+[moar](https://github.com/walles/moar) plugin for the [asdf version manager](https://asdf-vm.com) and [mise version manager](https://mise.jdx.dev/).
 
 </div>
 
@@ -15,10 +15,7 @@
 
 # Dependencies
 
-**TODO: adapt this section**
-
 - `bash`, `curl`, `tar`, and [POSIX utilities](https://pubs.opengroup.org/onlinepubs/9699919799/idx/utilities.html).
-- `SOME_ENV_VAR`: set this environment variable in your shell config to load the correct version of tool x.
 
 # Install
 

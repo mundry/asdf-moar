@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for moar.
 GH_REPO="https://github.com/walles/moar"
 TOOL_NAME="moar"
 TOOL_TEST="moar --version"
@@ -31,9 +30,36 @@ list_github_tags() {
 }
 
 list_all_versions() {
-	# TODO: Adapt this. By default we simply list the tag names from GitHub releases.
-	# Change this function if moar has other means of determining installable versions.
 	list_github_tags
+}
+
+get_platform() {
+  local platform
+
+  case "$(uname | tr '[:upper:]' '[:lower:]')" in
+  darwin) platform="darwin" ;;
+  linux) platform="linux" ;;
+  windows) platform="windows" ;;
+  *)
+    fail "Platform '$(uname)' not supported!"
+    ;;
+  esac
+
+  echo -n $platform
+}
+
+get_arch() {
+  local arch
+
+  case "$(uname -m)" in
+  x86_64 | amd64) arch="amd64" ;;
+  aarch64 | arm64) arch="arm" ;;
+  *)
+    fail "Arch '$(uname -m)' not supported!"
+    ;;
+  esac
+
+  echo -n $arch
 }
 
 download_release() {
@@ -41,8 +67,7 @@ download_release() {
 	version="$1"
 	filename="$2"
 
-	# TODO: Adapt the release URL convention for moar
-	url="$GH_REPO/archive/v${version}.tar.gz"
+	url="$GH_REPO/releases/download/v${version}/${TOOL_NAME}-v${version}-$(get_platform)-$(get_arch)"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
@@ -59,9 +84,9 @@ install_version() {
 
 	(
 		mkdir -p "$install_path"
-		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
+		cp "$ASDF_DOWNLOAD_PATH"/"${TOOL_NAME}" "$install_path"
+		chmod +x "$install_path"/"${TOOL_NAME}"
 
-		# TODO: Assert moar executable exists.
 		local tool_cmd
 		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
 		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
